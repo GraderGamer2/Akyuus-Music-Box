@@ -1,0 +1,47 @@
+{
+  "name": "akyuus-music-box",
+  "version": "1.6.0",
+  "description": "Random Touhou arrangements from YouTube",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "minify": "node build/minify.js",
+    "dist": "node build/minify.js && electron-builder --linux AppImage --publish never"
+  },
+  "keywords": [],
+  "author": "Touhou Roulette",
+  "license": "MIT",
+  "devDependencies": {
+    "@fontsource/shippori-mincho": "^5.3.0",
+    "@fontsource/zen-maru-gothic": "^5.3.1",
+    "electron": "^45.2.1",
+    "electron-builder": "^26.18.0",
+    "esbuild": "^0.28.2"
+  },
+  "build": {
+    "appId": "app.akyuusmusicbox",
+    "productName": "Akyuu's Music Box",
+    "files": [
+      "main.js",
+      "preload.js",
+      "renderer-min/**/*",
+      "package.json"
+    ],
+    "linux": {
+      "target": [
+        "AppImage"
+      ],
+      "category": "AudioVideo",
+      "icon": "build/icon.png",
+      "artifactName": "Akyuus-Music-Box-${version}-x86_64.AppImage",
+      "executableName": "akyuus-music-box"
+    },
+    "compression": "normal",
+    "electronLanguages": [
+      "en-US"
+    ],
+    "asar": true,
+    "removePackageScripts": true,
+    "removePackageKeywords": true
+  }
+}

@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>Akyuu’s Music Box</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="brandbox"><img class="logo" src="logo.png" alt="" width="28" height="38"><h1 class="brand">Akyuu’s Music Box</h1></div>
+    <div class="omni" id="omni">
+      <div class="omni-field" id="omniField">
+        <div class="tokens" id="tokens"></div>
+        <input id="searchInput" type="text" role="combobox" aria-expanded="false" aria-controls="suggest" aria-autocomplete="list"
+          placeholder="Search a genre, character, or song" autocomplete="off" spellcheck="false" aria-label="Search Touhou arrangements">
+        <button type="button" class="icon-btn flat" id="searchBtn" title="Search" aria-label="Search">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>
+        </button>
+      </div>
+      <div class="suggest" id="suggest" role="listbox" aria-label="Suggestions" hidden></div>
+    </div>
+    <button class="btn primary" id="rollBtn" type="button">Roll a song</button>
+    <button class="icon-btn" id="settingsBtn" type="button" title="Settings" aria-label="Open settings">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3h0a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5h0a1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8v0a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+    </button>
+  </header>
+
+  <div class="main">
+    <main class="theater" aria-label="Player">
+      <div class="player-wrap" id="playerWrap">
+        <div id="player"></div>
+        <p class="stage-empty" id="stageEmpty">Pick a genre, or roll for something random.</p>
+      </div>
+    </main>
+
+    <aside class="drawer" id="drawer" hidden aria-label="Library">
+      <div class="tabs" role="tablist">
+        <button role="tab" class="tab on" data-tab="queue" aria-selected="true">Up next <span id="queueCount" class="count"></span></button>
+        <button role="tab" class="tab" data-tab="favs" aria-selected="false">Playlist <span id="favCount" class="count"></span></button>
+        <button role="tab" class="tab" data-tab="history" aria-selected="false">History</button>
+      </div>
+      <div class="list-tools" id="plTools" hidden>
+        <input id="plSearch" type="search" placeholder="Search your playlist" autocomplete="off" aria-label="Search your playlist">
+        <button class="btn ghost small" id="plPlay" type="button">Play all</button>
+        <button class="btn ghost small" id="plShuffle" type="button" aria-pressed="false">Shuffle</button>
+      </div>
+      <div class="list-tools" id="histTools" hidden>
+        <input id="histSearch" type="search" placeholder="Search your history" autocomplete="off" aria-label="Search your history">
+        <button class="btn ghost small" id="histSelect" type="button" aria-pressed="false">Select</button>
+        <button class="btn ghost small" id="histAll" type="button" hidden>Select all</button>
+        <button class="btn ghost small" id="histDelete" type="button" hidden disabled>Delete selected</button>
+        <button class="btn ghost small" id="histClear" type="button">Clear all</button>
+      </div>
+      <ul class="list" id="list"></ul>
+    </aside>
+  </div>
+
+  <footer class="bar">
+    <div class="art"><img id="coverImg" alt="" hidden></div>
+    <div class="info">
+      <h2 id="title" class="title">Nothing playing yet</h2>
+      <p class="sub"><span id="channel" class="channel"></span><span id="meta" class="meta"></span></p>
+      <p class="sub"><span id="peek" class="peek"></span><span id="modeTag" class="modetag" hidden></span></p>
+      <p id="status" class="status" role="status" aria-live="polite"></p>
+    </div>
+    <div class="controls">
+      <button class="icon-btn" id="prevBtn" type="button" title="Previous song (P)" aria-label="Previous song">
+        <svg viewBox="0 0 24 24" width="22" height="22"><path d="M6 5h2v14H6zM20 5v14L9 12z" fill="currentColor"/></svg>
+      </button>
+      <button class="icon-btn" id="nextBtn" type="button" title="Next song (N)" aria-label="Next song">
+        <svg viewBox="0 0 24 24" width="22" height="22"><path d="M16 5h2v14h-2zM4 5v14l11-7z" fill="currentColor"/></svg>
+      </button>
+      <button class="icon-btn" id="favBtn" type="button" title="Add to playlist (F)" aria-label="Add to playlist" aria-pressed="false">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h10M4 11h10M4 16h6"/><path class="plus" d="M17 13v6M14 16h6"/><path class="check" d="M14 17l2.4 2.4L21 14.5"/></svg>
+      </button>
+      <button class="btn ghost" id="libraryBtn" type="button" aria-pressed="true" title="Library: up next, playlist, history (L)">Library</button>
+      <button class="btn ghost" id="ytBtn" type="button">Open on YouTube</button>
+      <button class="btn ghost" id="copyBtn" type="button">Copy link</button>
+      <button class="btn ghost" id="reloadBtn" type="button" title="Reload the video player at the same spot (use this if it ever goes gray)">Reload player</button>
+    </div>
+  </footer>
+</div>
+
+<section class="settings" id="settings" aria-label="Settings">
+  <div class="settings-inner">
+    <div class="settings-head">
+      <h2>Settings</h2>
+      <button class="btn ghost" id="settingsClose" type="button">Back to the player</button>
+    </div>
+
+    <h3>Appearance</h3>
+    <div class="row"><span class="row-label">Mode</span>
+      <div class="seg" id="modeSeg" role="group" aria-label="Color mode">
+        <button type="button" data-mode="dark">Dark</button>
+        <button type="button" data-mode="light">Light</button>
+        <button type="button" data-mode="system">Match system</button>
+      </div></div>
+    <div class="row"><span class="row-label">Palette</span>
+      <div class="swatches" id="swatches" role="group" aria-label="Palette"></div></div>
+
+    <div class="row"><span class="row-label">Font</span>
+      <div class="fontnow"><span id="fontNow">System default</span><button class="btn ghost small" id="fontReset" type="button">Use system default</button></div></div>
+    <div class="fontbox">
+      <input id="fontSearch" type="text" placeholder="Search the fonts installed on this computer" autocomplete="off" spellcheck="false" aria-label="Search installed fonts">
+      <ul id="fontList" class="fontlist"></ul>
+      <p class="hint" id="fontHint"></p>
+    </div>
+    <div class="row"><span class="row-label">Window title</span>
+      <label class="toggle"><input type="checkbox" id="titleToggle"><span>Show the current song in the window title (otherwise it stays “Akyuu’s Music Box”)</span></label></div>
+
+    <h3>Playback</h3>
+    <div class="row"><span class="row-label">Player</span>
+      <div class="seg" id="engineSeg" role="group" aria-label="Player type">
+        <button type="button" data-engine="embed">Embedded player</button>
+        <button type="button" data-engine="watch">YouTube watch page</button>
+      </div></div>
+    <p class="hint">The embedded player is cleaner. The watch page player is the fallback: it plays everything YouTube allows, including videos with embedding turned off, but can show ads. The app switches to it by itself when the embedded player is refused.</p>
+
+    <div class="row"><span class="row-label">When a song ends</span>
+      <label class="toggle"><input type="checkbox" id="autoToggle" checked><span>Play the next song automatically</span></label></div>
+
+    <h3>Graphics</h3>
+    <div class="row"><span class="row-label">Rendering</span>
+      <div class="seg" id="gfxSeg" role="group" aria-label="Rendering">
+        <button type="button" data-gfx="software">Software</button>
+        <button type="button" data-gfx="opengl-egl">OpenGL (EGL)</button>
+        <button type="button" data-gfx="opengl">OpenGL (desktop)</button>
+        <button type="button" data-gfx="vulkan">Vulkan</button>
+      </div></div>
+    <div class="row"><span class="row-label">Window system</span>
+      <div class="seg" id="displaySeg" role="group" aria-label="Window system">
+        <button type="button" data-display="auto">Automatic</button>
+        <button type="button" data-display="x11">X11</button>
+        <button type="button" data-display="wayland">Wayland</button>
+      </div></div>
+    <div class="row"><span class="row-label">Video decoding</span>
+      <label class="toggle"><input type="checkbox" id="hwVideoToggle"><span>Use the GPU to decode video (experimental, GPU modes only)</span></label></div>
+    <p class="hint" id="gfxHint">Software is the safe default. In the GPU modes the GPU draws the interface while video is decoded in software, which avoids the crashes and window-drag glitches seen on some drivers. OpenGL (EGL) is the one to try first; if dragging the window glitches on Wayland, try the X11 window system. Vulkan is experimental. Changes apply after a restart. If a GPU mode crashes or freezes the window, the app falls back to Software by itself on the next start.</p>
+    <p class="hint" id="gfxNow"></p>
+    <div class="row-actions">
+      <button class="btn primary" id="restartBtn" type="button" hidden>Restart to apply</button>
+      <button class="btn ghost" id="gfxInfoBtn" type="button">Show graphics details</button>
+    </div>
+    <pre class="info-pre" id="gfxInfo" hidden></pre>
+
+    <h3>Privacy</h3>
+    <div class="row"><span class="row-label">Tracking</span>
+      <label class="toggle"><input type="checkbox" id="trackToggle"><span>Block YouTube and Google analytics requests (experimental)</span></label></div>
+    <p class="hint">Always on: the engine never contacts Google's browser update, component and Safe Browsing services. The switch above also cancels playback statistics, tracking pings and analytics scripts. It is off by default because I could not test it against every video; if a video ever stalls, turn it off.</p>
+
+    <h3>Your data</h3>
+    <p class="hint">Settings, playlist and history are stored in one file, <code id="dataDir">~/.akyuus-music-box</code>. The app writes no log files anywhere, and its cache is kept in memory and discarded when you quit.</p>
+    <p class="hint">To avoid repeats, songs you have already played are left out of new searches and rolls. <span id="seenCount">0 songs</span> are remembered right now.</p>
+    <div class="row-actions">
+      <button class="btn ghost" id="openDataBtn" type="button">Open the folder</button>
+      <button class="btn ghost" id="clearHistoryBtn" type="button">Clear history</button>
+      <button class="btn ghost" id="clearSeenBtn" type="button">Let played songs come back</button>
+    </div>
+
+    <h3>Keyboard shortcuts</h3>
+    <p class="hint">N next, P previous, R roll, F add or remove from playlist, L show or hide the library, / search.</p>
+  </div>
+</section>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

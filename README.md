@@ -3,7 +3,7 @@
 <img width="1264" height="844" alt="Screenshot From 2026-11-05 14-42-15" src="https://github.com/user-attachments/assets/57fd425f-829c-46f9-a03c-7081b7270783" />
 
 A small (well not really it's electron) Linux desktop player for Touhou arrangements. Pick a genre, a game, a character or a song (or hit **Roll**),
-and it finds arrangements on YouTube and plays them in the official YouTube player.
+and it finds arrangements on YouTube and plays them in the embedded YouTube player in the app.
 
 *Unofficial fan project. Not affiliated with or endorsed by ZUN / Team Shanghai Alice or YouTube.*
 
